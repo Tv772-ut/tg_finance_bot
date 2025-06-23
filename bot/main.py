@@ -1,18 +1,15 @@
-# bot/main.py
-
-from telegram.ext import ApplicationBuilder
-from bot.handlers import register_handlers
 import os
-from dotenv import load_dotenv
+from aiogram import Bot, Dispatcher, executor, types
 
-load_dotenv()
+API_TOKEN = os.getenv("BOT_TOKEN")
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot)
 
-def main():
-    application = ApplicationBuilder().token(BOT_TOKEN).build()
-    register_handlers(application)
-    application.run_polling()
+@dp.message_handler(commands=['start', 'help'])
+async def send_welcome(message: types.Message):
+    await message.reply("未来科技财务机器人已启动 ✅")
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    from aiogram import executor
+    executor.start_polling(dp, skip_updates=True)
