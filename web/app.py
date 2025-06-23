@@ -1,34 +1,15 @@
-from flask import Flask, jsonify, request
-from models import Session, Record, UserWallet
+# web/app.py
+from flask import Flask, jsonify
+from models.init import init_db
+import os
 
 app = Flask(__name__)
+init_db()
 
 @app.route('/')
 def index():
-    return jsonify({'status': 'ok', 'message': 'Welcome to WebApp 🧠'})
-
-@app.route('/records')
-def get_records():
-    session = Session()
-    records = session.query(Record).all()
-    return jsonify([{
-        'id': r.id,
-        'amount': r.amount,
-        'note': r.note,
-        'category': r.category,
-        'created_at': r.created_at.isoformat()
-    } for r in records])
-
-@app.route('/wallets')
-def get_wallets():
-    session = Session()
-    wallets = session.query(UserWallet).all()
-    return jsonify([{
-        'user_id': w.user_id,
-        'address': w.address,
-        'remark': w.remark,
-        'phone_number': w.phone_number
-    } for w in wallets])
+    return jsonify({'message': '未来科技记账机器人 Web 控制端运行中'})
 
 if __name__ == '__main__':
-    app.run()
+    port = int(os.getenv("WEB_PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
