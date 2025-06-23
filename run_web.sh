@@ -1,6 +1,5 @@
 #!/bin/bash
-cd "$(dirname "$0")"
-export FLASK_APP=web/app.py
-export FLASK_ENV=production
+
+echo "🌐 正在启动 Web 控制面板..."
 source .env
-python3 web/app.py
+gunicorn -w 2 -b 0.0.0.0:8000 web.app:app
